@@ -1,0 +1,35 @@
+#!/bin/bash
+#PBS -N test
+#PBS -l select=1:ncpus=10:ngpus=4:mem=24gb
+#PBS -l walltime=00:10:00
+#PBS -q normal
+#PBS -P Personal
+#PBS -j oe
+#PBS -o ./job_output.log
+#PBS -e ./job_error.log
+
+# --- Load modules if needed (e.g., CUDA) ---
+module load anaconda/2023.07
+module load cuda/12.6  # adjust to cluster-supported CUDA version
+
+# --- Initialize Conda ---
+export PATH="$HOME/miniconda3/bin:$PATH"
+eval "$(conda shell.bash hook)"
+
+# --- Activate environment ---
+conda activate solospeech
+
+# --- Move to working directory ---
+cd $PBS_O_WORKDIR
+
+# --- Optional: check GPU status ---
+nvidia-smi
+
+
+export PYTHONPATH=$PBS_O_WORKDIR/SoloSpeech:$PBS_O_WORKDIR/geco:$PYTHONPATH
+
+# --- Run your script ---
+python3 SoloSpeech/scripts/test_v2.py \
+    --test-wav "./Input_audio/Input_audio.wav" \
+    --enroll-wav "./Input_audio/speaker_enrollment.wav" \
+    --output-path "./Solospeech_Output/output_audio.wav"
