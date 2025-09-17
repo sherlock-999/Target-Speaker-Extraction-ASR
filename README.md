@@ -4,13 +4,9 @@ This project combines **SoloSpeech** (for target speaker extraction) with **Whis
 
 ---
 
-### 1. Clone the Repository
+### Clone the Repository
 ```bash
 git clone https://github.com/sherlock-999/Target-Speaker-Extraction-ASR.git
 cd Target-Speaker-Extraction-ASR
-
-
-### 2. Clone the Repository
-```bash
 conda env create -f environment.yml
 conda activate pipeline
