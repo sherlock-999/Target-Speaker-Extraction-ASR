@@ -17,13 +17,10 @@ export PATH="$HOME/miniconda3/bin:$PATH"
 eval "$(conda shell.bash hook)"
 
 # --- Activate env ---
-conda activate solospeech
+conda activate pipeline
 
 # --- Go to working dir ---
 cd $PBS_O_WORKDIR
-
-# --- Debug GPU ---
-nvidia-smi
 
 # --- Ensure PYTHONPATH includes project ---
 export PYTHONPATH=$PBS_O_WORKDIR/SoloSpeech:$PBS_O_WORKDIR/geco:$PYTHONPATH
@@ -33,4 +30,4 @@ module load ffmpeg
 
 
 # --- Run pipeline (SoloSpeech -> Whisper) ---
-python3 main.py
+python3 main.py --input data/Input/test1.wav --enroll data/Input/speaker.wav --output data/Transcription_Output/test1.txt

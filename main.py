@@ -1,41 +1,22 @@
-import subprocess
-import os
+import argparse
+from src.pipeline import SpeechPipeline
 
-def run_pipeline():
-    '''
-    input_wav = "./Input/Input_audio.wav"
-    enroll_wav = "./Input/speaker_enrollment.wav"
-    solospeech_out = "./Solospeech_Output/output_audio.wav"
-    transcript_out = "./Transcription_Output/transcript.txt"
-    '''
 
-    input_wav = "./Input/test1.wav"
-    enroll_wav = "./Input/test1_enroll.wav"
-    solospeech_out = "./Solospeech_Output/output_audio_test1.wav"
-    transcript_out = "./Transcription_Output/transcript_test1.txt"
+def main():
+    parser = argparse.ArgumentParser(description="Run speech pipeline")
+    parser.add_argument("--input", required=True, help="Path to input wav file")
+    parser.add_argument("--enroll", required=True, help="Path to enrollment wav file")
+    parser.add_argument("--output", required=True, help="Path for transcript txt")
+    parser.add_argument("--return-text", action="store_true")
+    args = parser.parse_args()
 
-    os.makedirs("./Solospeech_Output", exist_ok=True)
-    os.makedirs("./Transcription_Output", exist_ok=True)
+    pipeline = SpeechPipeline()
+    result = pipeline.inference(args.input, args.enroll, args.output, args.return_text)
 
-    # 1. Run SoloSpeech
-    print("Running SoloSpeech...")
-    subprocess.run([
-        "python3", "SoloSpeech/scripts/test_v2.py",
-        "--test-wav", input_wav,
-        "--enroll-wav", enroll_wav,
-        "--output-path", solospeech_out
-    ], check=True)
-
-    
-    # 2. Run Whisper
-    print("Running Whisper transcription...")
-    subprocess.run([
-        "python3", "whisper_runner.py",
-        solospeech_out,
-        transcript_out
-    ], check=True)
-
+    if args.return_text:
+        print("\n[TRANSCRIPT]:\n")
+        print(result)
 
 
 if __name__ == "__main__":
-    run_pipeline()
+    main()
