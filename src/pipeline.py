@@ -6,10 +6,16 @@ class SpeechPipeline:
     def __init__(self,
                  solospeech_script: str = "src/SoloSpeech/scripts/test_v2.py",
                  whisper_script: str = "src/whisper_runner.py"):
-        """Simple speech pipeline wrapper."""
-        root = Path(__file__).resolve().parent.parent
-        self.solospeech_script = (root / solospeech_script).resolve()
-        self.whisper_script = (root / whisper_script).resolve()
+        # Root of the repo (two levels up from this file)
+        self.root = Path(__file__).resolve().parent.parent
+
+        # Resolve script paths
+        self.solospeech_script = (self.root / solospeech_script).resolve()
+        self.whisper_script = (self.root / whisper_script).resolve()
+
+        # Add repo root to PYTHONPATH so local imports work
+        if str(self.root) not in sys.path:
+            sys.path.insert(0, str(self.root))
 
     def inference(self, input_wav: str, enroll_wav: str,
                   output_path: str, return_text: bool = False) -> str:
