@@ -30,4 +30,4 @@ module load ffmpeg
 
 
 # --- Run pipeline (SoloSpeech -> Whisper) ---
-python3 main.py --input data/Input/test1.wav --enroll data/Input/speaker.wav --output data/Transcription_Output/test1.txt
+python3 main.py --input data/Input/test1.wav --enroll data/Input/test1_enroll.wav --output data/Transcription_Output/test1.txt
